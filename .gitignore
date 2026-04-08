@@ -1,0 +1,6 @@
+.idea/
+.DS_Store
+.bundle/
+vendor/bundle/
+coverage/
+.junie/
