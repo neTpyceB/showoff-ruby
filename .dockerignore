@@ -1,0 +1,6 @@
+.git
+.github
+.idea
+.junie
+coverage
+vendor/bundle
