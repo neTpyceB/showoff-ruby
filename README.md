@@ -1,14 +1,11 @@
-# CLI Automation Toolkit
+# Ruby CLI Show-off Projects
 
-Minimal Docker-first Ruby CLI for file search, rename, and organization.
+Minimal Docker-first Ruby CLI projects for file automation and DSL execution.
 
 ## Features
 
-- Search direct child filenames by query
-- Rename a file
-- Organize direct child files into extension folders
-- Configure commands with CLI arguments
-- Emit structured log output
+- CLI Automation Toolkit
+- DSL Builder with `task` and `run`
 
 ## Requirements
 
@@ -19,9 +16,10 @@ Minimal Docker-first Ruby CLI for file search, rename, and organization.
 ```bash
 docker compose build
 docker compose run --rm app search --path spec/fixtures/smoke --query alpha
+docker compose run --rm --entrypoint bundle app exec bin/dsl_builder run --file spec/fixtures/dsl/smoke.rb --task build
 ```
 
-## Commands
+## CLI Automation Toolkit
 
 ```bash
 docker compose run --rm app search --path PATH --query QUERY
@@ -33,6 +31,22 @@ Optional for every command:
 
 ```bash
 --log-level debug
+```
+
+## DSL Builder
+
+DSL file:
+
+```ruby
+task 'build' do
+  run 'npm install'
+end
+```
+
+Run:
+
+```bash
+docker compose run --rm --entrypoint bundle app exec bin/dsl_builder run --file PATH_TO_DSL --task build
 ```
 
 ## Quality Gates

@@ -14,6 +14,7 @@ require 'stringio'
 $LOAD_PATH.unshift(File.expand_path('../lib', __dir__))
 
 require 'automation_toolkit'
+require 'dsl_builder'
 
 RSpec.configure do |config|
   config.disable_monkey_patching!
