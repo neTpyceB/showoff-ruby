@@ -4,3 +4,16 @@ services:
     volumes:
       - .:/workspace
     working_dir: /workspace
+  web_framework:
+    build: .
+    environment:
+      PORT: 9292
+    entrypoint:
+      - bundle
+      - exec
+      - bin/lightweight_web_framework
+    ports:
+      - '9292:9292'
+    volumes:
+      - .:/workspace
+    working_dir: /workspace

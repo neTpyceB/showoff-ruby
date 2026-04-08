@@ -3,6 +3,7 @@
 require 'simplecov'
 
 SimpleCov.start do
+  add_filter '/spec/'
   enable_coverage :branch
   minimum_coverage line: 100, branch: 100
 end
@@ -10,11 +11,14 @@ end
 require 'tmpdir'
 require 'open3'
 require 'stringio'
+require 'net/http'
+require 'socket'
 
 $LOAD_PATH.unshift(File.expand_path('../lib', __dir__))
 
 require 'automation_toolkit'
 require 'dsl_builder'
+require 'lightweight_web_framework'
 
 RSpec.configure do |config|
   config.disable_monkey_patching!

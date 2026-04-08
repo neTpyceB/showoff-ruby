@@ -20,6 +20,15 @@ The repository contains two Docker-first Ruby CLIs built from one image.
 - `DslBuilder::TaskRegistry`: stores named task blocks
 - `DslBuilder::Executor`: evaluates the selected task block and executes `run` commands
 
+## Lightweight Web Framework
+
+- `bin/lightweight_web_framework`: boots the demo application
+- `LightweightWebFramework::Router`: resolves routes by verb and path
+- `LightweightWebFramework::Application`: composes middleware around the router
+- `LightweightWebFramework::Request` and `LightweightWebFramework::Response`: explicit HTTP objects
+- `LightweightWebFramework::Server`: adapts WEBrick requests to framework objects
+- `LightweightWebFramework::DemoApp`: minimal app that proves routing, middleware, and responses
+
 ## Runtime Flow
 
 1. Docker starts the Ruby executable
@@ -31,3 +40,4 @@ The repository contains two Docker-first Ruby CLIs built from one image.
 
 - Automation Toolkit: filename search, single-file rename, organize by extension
 - DSL Builder: define `task` blocks and execute `run` commands for a named task
+- Lightweight Web Framework: serve `GET /`, return `404` for unknown routes, and add response headers through middleware

@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+$LOAD_PATH.unshift(File.expand_path('../lib', __dir__))
+
+require 'lightweight_web_framework'
+
+LightweightWebFramework::Server.new(
+  app: LightweightWebFramework::DemoApp.build,
+  port: Integer(ENV.fetch('PORT', '9292'))
+).start

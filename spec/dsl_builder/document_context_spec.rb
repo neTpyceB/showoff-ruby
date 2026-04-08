@@ -16,4 +16,8 @@ RSpec.describe DslBuilder::DocumentContext do
       described_class.new(registry).deploy('app')
     end.to raise_error(DslBuilder::Error, 'unknown DSL method: deploy')
   end
+
+  it 'does not report unknown DSL methods as supported' do
+    expect(described_class.new(DslBuilder::TaskRegistry.new).respond_to?(:deploy)).to be(false)
+  end
 end

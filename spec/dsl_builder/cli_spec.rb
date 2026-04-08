@@ -30,4 +30,15 @@ RSpec.describe DslBuilder::CLI do
     expect(out.string).to eq('')
     expect(err.string).to include('key not found: :task')
   end
+
+  it 'returns an error for an unknown command' do
+    out = StringIO.new
+    err = StringIO.new
+
+    exit_code = described_class.new(argv: ['deploy'], out:, err:).call
+
+    expect(exit_code).to eq(1)
+    expect(out.string).to eq('')
+    expect(err.string).to include('usage: run --file FILE --task TASK')
+  end
 end

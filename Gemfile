@@ -9,3 +9,4 @@ gem 'rake'
 gem 'rspec'
 gem 'rubocop'
 gem 'simplecov', require: false
+gem 'webrick'

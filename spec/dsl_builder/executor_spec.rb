@@ -31,4 +31,11 @@ RSpec.describe DslBuilder::Executor do
       described_class.new(registry:, out: StringIO.new, working_directory: Dir.tmpdir).call('build')
     end.to raise_error(DslBuilder::Error, 'unknown task instruction: deploy in build')
   end
+
+  it 'does not report unknown task instructions as supported' do
+    executor = described_class.new(registry: DslBuilder::TaskRegistry.new, out: StringIO.new,
+                                   working_directory: Dir.tmpdir)
+
+    expect(executor.respond_to?(:deploy)).to be(false)
+  end
 end

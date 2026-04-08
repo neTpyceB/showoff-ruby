@@ -1,11 +1,12 @@
-# Ruby CLI Show-off Projects
+# Ruby Show-off Projects
 
-Minimal Docker-first Ruby CLI projects for file automation and DSL execution.
+Minimal Docker-first Ruby projects for file automation, metaprogramming, and web framework internals.
 
 ## Features
 
 - CLI Automation Toolkit
 - DSL Builder with `task` and `run`
+- Lightweight Web Framework with routing, middleware, and request/response handling
 
 ## Requirements
 
@@ -17,6 +18,7 @@ Minimal Docker-first Ruby CLI projects for file automation and DSL execution.
 docker compose build
 docker compose run --rm app search --path spec/fixtures/smoke --query alpha
 docker compose run --rm --entrypoint bundle app exec bin/dsl_builder run --file spec/fixtures/dsl/smoke.rb --task build
+docker compose up web_framework
 ```
 
 ## CLI Automation Toolkit
@@ -47,6 +49,21 @@ Run:
 
 ```bash
 docker compose run --rm --entrypoint bundle app exec bin/dsl_builder run --file PATH_TO_DSL --task build
+```
+
+## Lightweight Web Framework
+
+Run:
+
+```bash
+docker compose up web_framework
+```
+
+Test:
+
+```bash
+curl -i http://127.0.0.1:9292/
+curl -i http://127.0.0.1:9292/missing
 ```
 
 ## Quality Gates

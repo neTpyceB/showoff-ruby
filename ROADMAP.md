@@ -8,10 +8,12 @@
 - Added CI, Makefile, and project documentation
 - Implemented the DSL Builder with `task`, `run`, `instance_eval`, and `method_missing`
 - Added DSL Builder unit, smoke, and end-to-end coverage
+- Implemented the Lightweight Web Framework with routing, request/response objects, and middleware
+- Added web framework unit, smoke, and end-to-end coverage
 
 ## Current
 
-- Delivered the first two project scopes
+- Delivered the first three project scopes
 
 ## Next
 
