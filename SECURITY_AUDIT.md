@@ -10,6 +10,7 @@
 - The web framework exposes only the local HTTP server declared in Docker Compose
 - The REST API exposes JSON endpoints on port 3000 and uses JWT bearer tokens
 - The realtime service exposes one browser page and one ActionCable WebSocket endpoint on port 9393
+- The high-performance service exposes one browser page and one profiled work endpoint on port 9494
 
 ## Accepted Scope
 
@@ -21,4 +22,5 @@
 - The API protects post CRUD routes with JWT bearer authentication
 - The realtime service keeps only in-memory shared document state
 - The realtime service allows local browser origins for ActionCable connections
+- The high-performance service caches calculated numeric results in Redis
 - No background processes are started
