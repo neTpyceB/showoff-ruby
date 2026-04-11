@@ -2,7 +2,7 @@
 
 ## Overview
 
-The repository contains multiple Docker-first Ruby executables plus one database-backed JSON API service.
+The repository contains multiple Docker-first Ruby executables, one database-backed JSON API service, and one ActionCable realtime service.
 
 ## CLI Automation Toolkit
 
@@ -40,6 +40,14 @@ The repository contains multiple Docker-first Ruby executables plus one database
 - `RestApiService::Paginator`: slices list responses
 - PostgreSQL: stores users and posts
 
+## Realtime Collaboration System
+
+- `bin/realtime_collaboration`: boots the Rack/ActionCable service with Puma
+- `RealtimeCollaboration::App`: serves the browser client
+- `RealtimeCollaboration::CollaborationChannel`: streams shared state and notification events
+- `RealtimeCollaboration::State`: keeps the single in-memory shared document state
+- ActionCable async adapter: broadcasts WebSocket messages inside the running process
+
 ## Runtime Flow
 
 1. Docker starts the Ruby executable
@@ -47,9 +55,19 @@ The repository contains multiple Docker-first Ruby executables plus one database
 3. File I/O loads local inputs
 4. The selected operation writes results to stdout
 
+## Realtime Flow
+
+1. Browser opens `GET /`
+2. Browser connects to `/cable`
+3. Client subscribes to `RealtimeCollaboration::CollaborationChannel`
+4. Channel transmits the current state
+5. Client sends an `update` action
+6. Channel broadcasts the shared state and notification messages
+
 ## Scope
 
 - Automation Toolkit: filename search, single-file rename, organize by extension
 - DSL Builder: define `task` blocks and execute `run` commands for a named task
 - Lightweight Web Framework: serve `GET /`, return `404` for unknown routes, and add response headers through middleware
 - REST API Service: user signup, JWT login, protected post CRUD, and page-based listing
+- Realtime Collaboration System: one shared document state, ActionCable update broadcasts, and notification broadcasts

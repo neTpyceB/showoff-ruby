@@ -1,6 +1,6 @@
 # Ruby Show-off Projects
 
-Minimal Docker-first Ruby projects for file automation, metaprogramming, web framework internals, and API development.
+Minimal Docker-first Ruby projects for file automation, metaprogramming, web framework internals, API development, and realtime collaboration.
 
 ## Features
 
@@ -8,6 +8,7 @@ Minimal Docker-first Ruby projects for file automation, metaprogramming, web fra
 - DSL Builder with `task` and `run`
 - Lightweight Web Framework with routing, middleware, and request/response handling
 - REST API Service with CRUD, validations, JWT auth, and pagination
+- Realtime Collaboration System with ActionCable shared state updates and notifications
 
 ## Requirements
 
@@ -21,6 +22,7 @@ docker compose run --rm app search --path spec/fixtures/smoke --query alpha
 docker compose run --rm --entrypoint bundle app exec bin/dsl_builder run --file spec/fixtures/dsl/smoke.rb --task build
 docker compose up web_framework
 docker compose up rest_api
+docker compose up realtime_collaboration
 ```
 
 ## CLI Automation Toolkit
@@ -93,6 +95,26 @@ Payloads:
 ```json
 {"email":"user@example.com","password":"secret"}
 {"title":"Hello","body":"World"}
+```
+
+## Realtime Collaboration System
+
+Run:
+
+```bash
+docker compose up realtime_collaboration
+```
+
+Open:
+
+```bash
+http://127.0.0.1:9393/
+```
+
+WebSocket:
+
+```bash
+ws://127.0.0.1:9393/cable
 ```
 
 ## Quality Gates

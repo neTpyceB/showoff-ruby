@@ -2,8 +2,8 @@
 
 ## Project
 - Name: Ruby Show-off Projects
-- Scope: Automation Toolkit, DSL Builder, Lightweight Web Framework, and REST API Service
-- Runtime: Docker-first Ruby CLIs, one local HTTP service, and one database-backed API
+- Scope: Automation Toolkit, DSL Builder, Lightweight Web Framework, REST API Service, and Realtime Collaboration System
+- Runtime: Docker-first Ruby CLIs, one local HTTP service, one database-backed API, and one ActionCable WebSocket service
 
 ## Commands
 - Build: `docker compose build`
@@ -14,6 +14,7 @@
 - Smoke Web: `docker compose up -d web_framework && curl http://127.0.0.1:9292/`
 - Migrate API: `docker compose run --rm -e DATABASE_URL=postgres://postgres:postgres@host.docker.internal:5432/showoff_ruby_development -e JWT_SECRET=test-secret --entrypoint bundle app exec ruby bin/rest_api_migrate`
 - Smoke API: `docker compose up -d rest_api && curl http://127.0.0.1:3000/api/posts`
+- Smoke Realtime: `docker compose up -d realtime_collaboration && curl http://127.0.0.1:9393/`
 
 ## Constraints
 - Keep implementation minimal and explicit to the documented scope

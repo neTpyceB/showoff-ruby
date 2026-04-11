@@ -46,6 +46,20 @@ services:
     volumes:
       - .:/workspace
     working_dir: /workspace
+  realtime_collaboration:
+    build: .
+    environment:
+      PORT: 9393
+      XDG_CACHE_HOME: /workspace/.tmp/cache
+    entrypoint:
+      - bundle
+      - exec
+      - bin/realtime_collaboration
+    ports:
+      - '9393:9393'
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
   web_framework:
     build: .
     environment:

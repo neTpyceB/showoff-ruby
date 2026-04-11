@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 
 ruby '4.0.2'
 
+gem 'actioncable'
 gem 'bcrypt'
 gem 'jwt'
 gem 'logger'
@@ -18,3 +19,4 @@ gem 'sequel'
 gem 'simplecov', require: false
 gem 'sinatra'
 gem 'webrick'
+gem 'websocket-client-simple'

@@ -15,6 +15,7 @@ require 'net/http'
 require 'json'
 require 'rack/test'
 require 'socket'
+require 'websocket-client-simple'
 
 ENV['APP_ENV'] ||= 'test'
 ENV['JWT_SECRET'] ||= 'test-secret'
@@ -25,6 +26,7 @@ $LOAD_PATH.unshift(File.expand_path('../lib', __dir__))
 require 'automation_toolkit'
 require 'dsl_builder'
 require 'lightweight_web_framework'
+require 'realtime_collaboration'
 require 'rest_api_service'
 
 RSpec.configure do |config|
