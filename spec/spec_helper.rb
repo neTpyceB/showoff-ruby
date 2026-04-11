@@ -4,6 +4,7 @@ require 'simplecov'
 
 SimpleCov.start do
   add_filter '/spec/'
+  coverage_dir '/tmp/showoff-ruby/coverage'
   enable_coverage :branch
   minimum_coverage line: 100, branch: 100
 end
@@ -31,7 +32,7 @@ require 'rest_api_service'
 
 RSpec.configure do |config|
   config.disable_monkey_patching!
-  config.example_status_persistence_file_path = '.rspec_status'
+  config.example_status_persistence_file_path = '/tmp/showoff-ruby/rspec_status'
   config.order = :random
   Kernel.srand config.seed
 end
