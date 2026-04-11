@@ -2,12 +2,23 @@ services:
   app:
     build: .
     environment:
+      REDIS_URL: redis://cache:6379/0
       XDG_CACHE_HOME: /workspace/.tmp/cache
     extra_hosts:
       - host.docker.internal:host-gateway
     volumes:
       - .:/workspace
     working_dir: /workspace
+  cache:
+    image: redis:8.6.2
+    healthcheck:
+      test:
+        - CMD
+        - redis-cli
+        - ping
+      interval: 2s
+      retries: 30
+      timeout: 2s
   db:
     image: postgres:18.3
     environment:
@@ -43,6 +54,26 @@ services:
       - host.docker.internal:host-gateway
     ports:
       - '3000:3000'
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+  high_performance:
+    build: .
+    depends_on:
+      cache:
+        condition: service_healthy
+    environment:
+      PORT: 9494
+      PUMA_MAX_THREADS: 8
+      PUMA_MIN_THREADS: 1
+      REDIS_URL: redis://cache:6379/0
+      XDG_CACHE_HOME: /workspace/.tmp/cache
+    entrypoint:
+      - bundle
+      - exec
+      - bin/high_performance_service
+    ports:
+      - '9494:9494'
     volumes:
       - .:/workspace
     working_dir: /workspace

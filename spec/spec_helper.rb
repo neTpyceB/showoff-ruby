@@ -21,11 +21,13 @@ require 'websocket-client-simple'
 ENV['APP_ENV'] ||= 'test'
 ENV['JWT_SECRET'] ||= 'test-secret'
 ENV['DATABASE_URL'] ||= 'postgres://postgres:postgres@host.docker.internal:5432/showoff_ruby_development'
+ENV['REDIS_URL'] ||= 'redis://cache:6379/0'
 
 $LOAD_PATH.unshift(File.expand_path('../lib', __dir__))
 
 require 'automation_toolkit'
 require 'dsl_builder'
+require 'high_performance_service'
 require 'lightweight_web_framework'
 require 'realtime_collaboration'
 require 'rest_api_service'

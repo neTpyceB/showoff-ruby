@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+$LOAD_PATH.unshift(File.expand_path('../lib', __dir__))
+
+require 'rackup'
+require 'high_performance_service'
+
+Rackup::Server.start(
+  app: HighPerformanceService.app,
+  server: 'puma',
+  Host: '0.0.0.0',
+  Port: Integer(ENV.fetch('PORT', '9494')),
+  Threads: "#{ENV.fetch('PUMA_MIN_THREADS', '1')}:#{ENV.fetch('PUMA_MAX_THREADS', '8')}"
+)

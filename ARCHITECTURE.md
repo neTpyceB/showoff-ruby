@@ -2,7 +2,7 @@
 
 ## Overview
 
-The repository contains multiple Docker-first Ruby executables, one database-backed JSON API service, and one ActionCable realtime service.
+The repository contains multiple Docker-first Ruby executables, one database-backed JSON API service, one ActionCable realtime service, and one Redis-backed performance service.
 
 ## CLI Automation Toolkit
 
@@ -48,6 +48,15 @@ The repository contains multiple Docker-first Ruby executables, one database-bac
 - `RealtimeCollaboration::State`: keeps the single in-memory shared document state
 - ActionCable async adapter: broadcasts WebSocket messages inside the running process
 
+## High-performance Service
+
+- `bin/high_performance_service`: boots the Rack service with Puma thread settings
+- `HighPerformanceService::App`: serves the browser page and `/work?input=`
+- `HighPerformanceService::Calculator`: computes Fibonacci values iteratively
+- `HighPerformanceService::Cache`: stores computed values in Redis
+- `HighPerformanceService::Profiler`: returns CPU time, object allocation, and memory deltas
+- Redis: stores cached calculation results
+
 ## Runtime Flow
 
 1. Docker starts the Ruby executable
@@ -64,6 +73,14 @@ The repository contains multiple Docker-first Ruby executables, one database-bac
 5. Client sends an `update` action
 6. Channel broadcasts the shared state and notification messages
 
+## Performance Flow
+
+1. Browser opens `GET /`
+2. Client requests `/work?input=35`
+3. Service checks Redis for the computed result
+4. Service computes missing values with the iterative calculator
+5. Service returns the result, cache state, and profile metrics
+
 ## Scope
 
 - Automation Toolkit: filename search, single-file rename, organize by extension
@@ -71,3 +88,4 @@ The repository contains multiple Docker-first Ruby executables, one database-bac
 - Lightweight Web Framework: serve `GET /`, return `404` for unknown routes, and add response headers through middleware
 - REST API Service: user signup, JWT login, protected post CRUD, and page-based listing
 - Realtime Collaboration System: one shared document state, ActionCable update broadcasts, and notification broadcasts
+- High-performance Service: one profiled Fibonacci work endpoint backed by Redis caching and Puma thread tuning

@@ -7,7 +7,7 @@ lint:
 	docker compose run --rm --entrypoint bundle app exec rubocop
 
 test:
-	docker compose up --wait -d db
+	docker compose up --wait -d cache db
 	docker compose run --rm -e DATABASE_URL=postgres://postgres:postgres@host.docker.internal:5432/showoff_ruby_development -e JWT_SECRET=test-secret --entrypoint bundle app exec ruby bin/rest_api_migrate
 	docker compose run --rm -e DATABASE_URL=postgres://postgres:postgres@host.docker.internal:5432/showoff_ruby_development -e JWT_SECRET=test-secret --entrypoint bundle app exec rspec
 
@@ -34,3 +34,8 @@ smoke:
 		until curl --fail --silent --show-error http://127.0.0.1:9393/ >/tmp/showoff-ruby-realtime-root.out; do sleep 1; done; \
 		grep "Shared workspace" /tmp/showoff-ruby-realtime-root.out; \
 		docker compose run --rm --entrypoint bundle app exec ruby -rwebsocket-client-simple -rjson -e '\''messages=Queue.new; ws=WebSocket::Client::Simple.connect("ws://realtime_collaboration:9393/cable", headers: {"Origin"=>"http://localhost:9393"}); ws.on(:message){|event| messages << JSON.parse(event.data)}; deadline=Time.now+5; loop do; frame=messages.pop(true) rescue nil; break if frame && frame["type"]=="welcome"; abort("welcome timeout") if Time.now>deadline; sleep 0.05; end; identifier=JSON.generate(channel:"RealtimeCollaboration::CollaborationChannel"); ws.send(JSON.generate(command:"subscribe", identifier:identifier)); deadline=Time.now+5; loop do; frame=messages.pop(true) rescue nil; payload=frame["message"] if frame && frame["message"].is_a?(Hash); break if payload && payload["type"]=="state"; abort("state timeout") if Time.now>deadline; sleep 0.05; end; ws.send(JSON.generate(command:"message", identifier:identifier, data:JSON.generate(action:"update", content:"Hello"))); deadline=Time.now+5; state=false; notice=false; until state && notice; frame=messages.pop(true) rescue nil; payload=frame["message"] if frame && frame["message"].is_a?(Hash); state ||= payload && payload["type"]=="state" && payload["state"]["content"]=="Hello"; notice ||= payload && payload["type"]=="notification" && payload["message"]=="Document updated"; abort("update timeout") if Time.now>deadline; sleep 0.05; end; ws.close'\'''
+	docker compose up -d high_performance
+	sh -c 'trap "docker compose down" EXIT; \
+		until curl --fail --silent --show-error http://127.0.0.1:9494/ >/tmp/showoff-ruby-performance-root.out; do sleep 1; done; \
+		grep "High-performance service" /tmp/showoff-ruby-performance-root.out; \
+		ruby -rnet/http -rjson -e '\''first=JSON.parse(Net::HTTP.get(URI("http://127.0.0.1:9494/work?input=35"))); second=JSON.parse(Net::HTTP.get(URI("http://127.0.0.1:9494/work?input=35"))); abort(first.inspect) unless first["result"]==9227465 && first["cached"]==false && first["profile"].key?("cpu_ns") && first["profile"].key?("allocated_objects") && first["profile"].key?("memory_bytes"); abort(second.inspect) unless second["result"]==9227465 && second["cached"]==true'\'''
