@@ -8,6 +8,7 @@
 - Command scope is limited to local filesystem operations provided by CLI arguments
 - DSL execution runs the shell commands declared in the DSL file supplied by the operator
 - The web framework exposes only the local HTTP server declared in Docker Compose
+- The REST API exposes JSON endpoints on port 3000 and uses JWT bearer tokens
 
 ## Accepted Scope
 
@@ -15,4 +16,6 @@
 - The DSL Builder executes task commands exactly as written in the loaded DSL file
 - The web framework handles only local HTTP requests and returns plain text responses
 - Only the local web framework service is exposed through Docker Compose on port 9292
+- The API stores user credentials as bcrypt password digests in PostgreSQL
+- The API protects post CRUD routes with JWT bearer authentication
 - No background processes are started

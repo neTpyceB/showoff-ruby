@@ -1,6 +1,48 @@
 services:
   app:
     build: .
+    environment:
+      XDG_CACHE_HOME: /workspace/.tmp/cache
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+  db:
+    image: postgres:18.3
+    environment:
+      POSTGRES_DB: showoff_ruby_development
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U postgres -d showoff_ruby_development
+      interval: 2s
+      retries: 30
+      timeout: 2s
+    ports:
+      - '5432:5432'
+    tmpfs:
+      - /var/lib/postgresql
+  rest_api:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@host.docker.internal:5432/showoff_ruby_development
+      JWT_SECRET: development-secret
+      PORT: 3000
+      XDG_CACHE_HOME: /workspace/.tmp/cache
+    entrypoint:
+      - sh
+      - -lc
+      - bundle exec ruby bin/rest_api_migrate && bundle exec ruby bin/rest_api_service
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    ports:
+      - '3000:3000'
     volumes:
       - .:/workspace
     working_dir: /workspace
@@ -8,6 +50,7 @@ services:
     build: .
     environment:
       PORT: 9292
+      XDG_CACHE_HOME: /workspace/.tmp/cache
     entrypoint:
       - bundle
       - exec

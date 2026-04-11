@@ -12,13 +12,20 @@ require 'tmpdir'
 require 'open3'
 require 'stringio'
 require 'net/http'
+require 'json'
+require 'rack/test'
 require 'socket'
+
+ENV['APP_ENV'] ||= 'test'
+ENV['JWT_SECRET'] ||= 'test-secret'
+ENV['DATABASE_URL'] ||= 'postgres://postgres:postgres@host.docker.internal:5432/showoff_ruby_development'
 
 $LOAD_PATH.unshift(File.expand_path('../lib', __dir__))
 
 require 'automation_toolkit'
 require 'dsl_builder'
 require 'lightweight_web_framework'
+require 'rest_api_service'
 
 RSpec.configure do |config|
   config.disable_monkey_patching!

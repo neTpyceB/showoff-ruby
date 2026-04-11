@@ -2,7 +2,7 @@
 
 ## Overview
 
-The repository contains two Docker-first Ruby CLIs built from one image.
+The repository contains multiple Docker-first Ruby executables plus one database-backed JSON API service.
 
 ## CLI Automation Toolkit
 
@@ -29,6 +29,17 @@ The repository contains two Docker-first Ruby CLIs built from one image.
 - `LightweightWebFramework::Server`: adapts WEBrick requests to framework objects
 - `LightweightWebFramework::DemoApp`: minimal app that proves routing, middleware, and responses
 
+## REST API Service
+
+- `bin/rest_api_service`: boots the Sinatra API with Puma
+- `bin/rest_api_migrate`: runs Sequel migrations
+- `RestApiService::App`: defines the JSON endpoints
+- `RestApiService::Models::User`: validates login data and stores password digests
+- `RestApiService::Models::Post`: validates CRUD resource data
+- `RestApiService::Authenticator`: issues and verifies JWT tokens
+- `RestApiService::Paginator`: slices list responses
+- PostgreSQL: stores users and posts
+
 ## Runtime Flow
 
 1. Docker starts the Ruby executable
@@ -41,3 +52,4 @@ The repository contains two Docker-first Ruby CLIs built from one image.
 - Automation Toolkit: filename search, single-file rename, organize by extension
 - DSL Builder: define `task` blocks and execute `run` commands for a named task
 - Lightweight Web Framework: serve `GET /`, return `404` for unknown routes, and add response headers through middleware
+- REST API Service: user signup, JWT login, protected post CRUD, and page-based listing
