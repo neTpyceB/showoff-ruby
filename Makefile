@@ -45,3 +45,9 @@ smoke:
 		until curl --fail --silent --show-error http://127.0.0.1:9595/ >/tmp/showoff-ruby-microservices-root.out; do sleep 1; done; \
 		grep "Microservices platform" /tmp/showoff-ruby-microservices-root.out; \
 		ruby -rnet/http -rjson -e '\''response=JSON.parse(Net::HTTP.get(URI("http://127.0.0.1:9595/api/users/1"))); abort(response.inspect) unless response=={"user"=>{"id"=>"1","name"=>"User 1"},"job"=>{"user_id"=>"1","status"=>"processed"}}'\'''
+	docker compose run --rm --entrypoint bundle app exec ruby -rredis -e 'r=Redis.new(url:"redis://cache:6379/0"); keys=r.keys("event_driven:*"); r.del(*keys) unless keys.empty?'
+	docker compose up -d --no-recreate event_driven_worker event_driven_platform
+	sh -c ' \
+		until curl --fail --silent --show-error http://127.0.0.1:9696/ >/tmp/showoff-ruby-events-root.out; do sleep 1; done; \
+		grep "Event-driven platform" /tmp/showoff-ruby-events-root.out; \
+		ruby -rnet/http -rjson -e '\''base="http://127.0.0.1:9696"; event=JSON.parse(Net::HTTP.post(URI("#{base}/events"), JSON.generate({message:"Issue opened"})).body); deadline=Time.now+5; notifications=[]; activity=[]; audit=[]; until notifications.any? && activity.any? && audit.any?; notifications=JSON.parse(Net::HTTP.get(URI("#{base}/notifications"))); activity=JSON.parse(Net::HTTP.get(URI("#{base}/activity"))); audit=JSON.parse(Net::HTTP.get(URI("#{base}/audit"))); abort("event timeout") if Time.now>deadline; sleep 0.1; end; abort(notifications.inspect) unless notifications==[{"event_id"=>event.fetch("id"),"message"=>"Notification: Issue opened"}]; abort(activity.inspect) unless activity==[{"event_id"=>event.fetch("id"),"message"=>"Activity: Issue opened"}]; abort(audit.inspect) unless audit==[{"event_id"=>event.fetch("id"),"message"=>"Issue opened","attempts"=>0}]'\'''

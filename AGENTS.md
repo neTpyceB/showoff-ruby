@@ -2,8 +2,8 @@
 
 ## Project
 - Name: Ruby Show-off Projects
-- Scope: Automation Toolkit, DSL Builder, Lightweight Web Framework, REST API Service, Realtime Collaboration System, High-performance Service, and Microservices Platform
-- Runtime: Docker-first Ruby CLIs, one local HTTP service, one database-backed API, one ActionCable WebSocket service, one Redis-backed performance service, and one gateway-backed microservices platform
+- Scope: Automation Toolkit, DSL Builder, Lightweight Web Framework, REST API Service, Realtime Collaboration System, High-performance Service, Microservices Platform, and Event-driven Platform
+- Runtime: Docker-first Ruby CLIs, one local HTTP service, one database-backed API, one ActionCable WebSocket service, one Redis-backed performance service, one gateway-backed microservices platform, and one Redis Streams event platform
 
 ## Commands
 - Build: `docker compose build`
@@ -17,6 +17,7 @@
 - Smoke Realtime: `docker compose up -d realtime_collaboration && curl http://127.0.0.1:9393/`
 - Smoke Performance: `docker compose up -d high_performance && curl http://127.0.0.1:9494/work?input=35`
 - Smoke Microservices: `docker compose up -d --no-recreate microservices_gateway && curl http://127.0.0.1:9595/api/users/1`
+- Smoke Events: `docker compose up -d --no-recreate event_driven_worker event_driven_platform && curl http://127.0.0.1:9696/`
 
 ## Constraints
 - Keep implementation minimal and explicit to the documented scope

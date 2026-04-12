@@ -19,10 +19,11 @@
 - Implemented the Realtime Collaboration System with ActionCable, shared state updates, notifications, Docker service, smoke coverage, and end-to-end WebSocket coverage
 - Implemented the High-performance Service with Redis caching, CPU/memory/allocation profiling, Puma thread tuning, smoke coverage, and end-to-end HTTP coverage
 - Implemented the Microservices Platform with auth, user, worker, API gateway, Docker multi-container wiring, smoke coverage, and end-to-end HTTP coverage
+- Implemented the Event-driven Platform with Redis Streams, notification/activity/audit projections, retry handling, Docker services, smoke coverage, and end-to-end HTTP coverage
 
 ## Current
 
-- Microservices Platform delivered under the documented strict execution rules
+- Event-driven Platform delivered under the documented strict execution rules
 
 ## Next
 

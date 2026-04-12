@@ -1,6 +1,6 @@
 # Ruby Show-off Projects
 
-Minimal Docker-first Ruby projects for file automation, metaprogramming, web framework internals, API development, realtime collaboration, Ruby performance work, and microservice coordination.
+Minimal Docker-first Ruby projects for file automation, metaprogramming, web framework internals, API development, realtime collaboration, Ruby performance work, microservice coordination, and event-driven architecture.
 
 ## Features
 
@@ -11,6 +11,7 @@ Minimal Docker-first Ruby projects for file automation, metaprogramming, web fra
 - Realtime Collaboration System with ActionCable shared state updates and notifications
 - High-performance Service with Redis caching, profiling, allocation-aware calculation, and Puma thread tuning
 - Microservices Platform with auth, user, worker, API gateway, and service-to-service HTTP calls
+- Event-driven Platform with Redis Streams, event reactions, notifications, activity feed, audit log, and retry handling
 
 ## Requirements
 
@@ -27,6 +28,7 @@ docker compose up rest_api
 docker compose up realtime_collaboration
 docker compose up high_performance
 docker compose up microservices_gateway
+docker compose up event_driven_platform event_driven_worker
 ```
 
 ## CLI Automation Toolkit
@@ -167,6 +169,34 @@ Services:
 microservices_gateway -> microservices_auth
 microservices_gateway -> microservices_user
 microservices_gateway -> microservices_worker
+```
+
+## Event-driven Platform
+
+Run:
+
+```bash
+docker compose up event_driven_platform event_driven_worker
+```
+
+Open:
+
+```bash
+http://127.0.0.1:9696/
+```
+
+Publish:
+
+```bash
+curl -X POST http://127.0.0.1:9696/events -d '{"message":"Issue opened"}'
+```
+
+Read models:
+
+```bash
+curl http://127.0.0.1:9696/notifications
+curl http://127.0.0.1:9696/activity
+curl http://127.0.0.1:9696/audit
 ```
 
 ## Quality Gates

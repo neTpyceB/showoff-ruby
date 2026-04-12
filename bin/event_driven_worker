@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+$LOAD_PATH.unshift(File.expand_path('../lib', __dir__))
+
+require 'event_driven_platform'
+
+worker = EventDrivenPlatform.worker
+
+Signal.trap('TERM') { exit }
+Signal.trap('INT') { exit }
+
+loop do
+  worker.tick
+  sleep Float(ENV.fetch('EVENT_WORKER_INTERVAL', '0.1'))
+end
