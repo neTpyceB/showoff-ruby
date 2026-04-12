@@ -29,6 +29,7 @@ require 'automation_toolkit'
 require 'dsl_builder'
 require 'high_performance_service'
 require 'lightweight_web_framework'
+require 'microservices_platform'
 require 'realtime_collaboration'
 require 'rest_api_service'
 

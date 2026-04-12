@@ -2,7 +2,7 @@
 
 ## Overview
 
-The repository contains multiple Docker-first Ruby executables, one database-backed JSON API service, one ActionCable realtime service, and one Redis-backed performance service.
+The repository contains multiple Docker-first Ruby executables, one database-backed JSON API service, one ActionCable realtime service, one Redis-backed performance service, and one small HTTP microservices platform.
 
 ## CLI Automation Toolkit
 
@@ -57,6 +57,15 @@ The repository contains multiple Docker-first Ruby executables, one database-bac
 - `HighPerformanceService::Profiler`: returns CPU time, object allocation, and memory deltas
 - Redis: stores cached calculation results
 
+## Microservices Platform
+
+- `bin/microservices_gateway`: boots the public Rack gateway on port 9595
+- `bin/microservices_auth`: boots the auth service and issues a service token
+- `bin/microservices_user`: boots the user service and returns a user for authenticated service calls
+- `bin/microservices_worker`: boots the worker service and processes one job request
+- `MicroservicesPlatform::GatewayApp`: serves the browser page and composes auth, user, and worker responses
+- `MicroservicesPlatform::AuthClient`, `UserClient`, and `WorkerClient`: perform service-to-service HTTP calls
+
 ## Runtime Flow
 
 1. Docker starts the Ruby executable
@@ -81,6 +90,15 @@ The repository contains multiple Docker-first Ruby executables, one database-bac
 4. Service computes missing values with the iterative calculator
 5. Service returns the result, cache state, and profile metrics
 
+## Microservices Flow
+
+1. Browser opens `GET /`
+2. Client requests `GET /api/users/1` through the gateway
+3. Gateway requests a token from the auth service
+4. Gateway requests the user from the user service with the token
+5. Gateway posts a job to the worker service
+6. Gateway returns the combined user and job payload
+
 ## Scope
 
 - Automation Toolkit: filename search, single-file rename, organize by extension
@@ -89,3 +107,4 @@ The repository contains multiple Docker-first Ruby executables, one database-bac
 - REST API Service: user signup, JWT login, protected post CRUD, and page-based listing
 - Realtime Collaboration System: one shared document state, ActionCable update broadcasts, and notification broadcasts
 - High-performance Service: one profiled Fibonacci work endpoint backed by Redis caching and Puma thread tuning
+- Microservices Platform: one gateway endpoint that coordinates auth, user, and worker services over HTTP

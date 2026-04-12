@@ -77,6 +77,63 @@ services:
     volumes:
       - .:/workspace
     working_dir: /workspace
+  microservices_auth:
+    build: .
+    environment:
+      PORT: 9596
+      XDG_CACHE_HOME: /workspace/.tmp/cache
+    entrypoint:
+      - bundle
+      - exec
+      - bin/microservices_auth
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+  microservices_gateway:
+    build: .
+    depends_on:
+      - microservices_auth
+      - microservices_user
+      - microservices_worker
+    environment:
+      AUTH_SERVICE_URL: http://microservices_auth:9596
+      PORT: 9595
+      USER_SERVICE_URL: http://microservices_user:9597
+      WORKER_SERVICE_URL: http://microservices_worker:9598
+      XDG_CACHE_HOME: /workspace/.tmp/cache
+    entrypoint:
+      - bundle
+      - exec
+      - bin/microservices_gateway
+    ports:
+      - '9595:9595'
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+  microservices_user:
+    build: .
+    environment:
+      PORT: 9597
+      XDG_CACHE_HOME: /workspace/.tmp/cache
+    entrypoint:
+      - bundle
+      - exec
+      - bin/microservices_user
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+  microservices_worker:
+    build: .
+    environment:
+      PORT: 9598
+      XDG_CACHE_HOME: /workspace/.tmp/cache
+    entrypoint:
+      - bundle
+      - exec
+      - bin/microservices_worker
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
   realtime_collaboration:
     build: .
     environment:
