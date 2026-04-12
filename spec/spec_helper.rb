@@ -27,6 +27,7 @@ $LOAD_PATH.unshift(File.expand_path('../lib', __dir__))
 
 require 'automation_toolkit'
 require 'dsl_builder'
+require 'event_driven_platform'
 require 'high_performance_service'
 require 'lightweight_web_framework'
 require 'microservices_platform'
@@ -38,4 +39,9 @@ RSpec.configure do |config|
   config.example_status_persistence_file_path = '/tmp/showoff-ruby/rspec_status'
   config.order = :random
   Kernel.srand config.seed
+end
+
+def clear_event_driven_platform
+  keys = EventDrivenPlatform.redis.keys('event_driven:*')
+  EventDrivenPlatform.redis.del(*keys) unless keys.empty?
 end

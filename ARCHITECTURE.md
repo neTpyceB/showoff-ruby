@@ -2,7 +2,7 @@
 
 ## Overview
 
-The repository contains multiple Docker-first Ruby executables, one database-backed JSON API service, one ActionCable realtime service, one Redis-backed performance service, and one small HTTP microservices platform.
+The repository contains multiple Docker-first Ruby executables, one database-backed JSON API service, one ActionCable realtime service, one Redis-backed performance service, one small HTTP microservices platform, and one Redis Streams event-driven platform.
 
 ## CLI Automation Toolkit
 
@@ -66,6 +66,17 @@ The repository contains multiple Docker-first Ruby executables, one database-bac
 - `MicroservicesPlatform::GatewayApp`: serves the browser page and composes auth, user, and worker responses
 - `MicroservicesPlatform::AuthClient`, `UserClient`, and `WorkerClient`: perform service-to-service HTTP calls
 
+## Event-driven Platform
+
+- `bin/event_driven_platform`: boots the public Rack event API on port 9696
+- `bin/event_driven_worker`: runs the event worker loop
+- `EventDrivenPlatform::Bus`: publishes and reads Redis Stream events, stores offsets, retries failed events, and stores exhausted failures
+- `EventDrivenPlatform::Processor`: dispatches each event to handlers and delegates handler failures to retry handling
+- `EventDrivenPlatform::NotificationService`: projects notification records
+- `EventDrivenPlatform::ActivityFeed`: projects activity feed records
+- `EventDrivenPlatform::AuditLog`: projects audit records from processed events
+- Redis: stores the stream, worker offset, read models, and failed events
+
 ## Runtime Flow
 
 1. Docker starts the Ruby executable
@@ -99,6 +110,16 @@ The repository contains multiple Docker-first Ruby executables, one database-bac
 5. Gateway posts a job to the worker service
 6. Gateway returns the combined user and job payload
 
+## Event-driven Flow
+
+1. Browser opens `GET /`
+2. Client posts `{"message":"Issue opened"}` to `POST /events`
+3. API appends the event to the Redis Stream
+4. Worker reads the stream from its stored offset
+5. Processor dispatches the event to notification, activity feed, and audit handlers
+6. Handler failures are retried once and then stored as failed events
+7. Client reads projections through `/notifications`, `/activity`, and `/audit`
+
 ## Scope
 
 - Automation Toolkit: filename search, single-file rename, organize by extension
@@ -108,3 +129,4 @@ The repository contains multiple Docker-first Ruby executables, one database-bac
 - Realtime Collaboration System: one shared document state, ActionCable update broadcasts, and notification broadcasts
 - High-performance Service: one profiled Fibonacci work endpoint backed by Redis caching and Puma thread tuning
 - Microservices Platform: one gateway endpoint that coordinates auth, user, and worker services over HTTP
+- Event-driven Platform: one event publish endpoint, three read-model endpoints, Redis Stream event log, and retry/failure handling

@@ -77,6 +77,40 @@ services:
     volumes:
       - .:/workspace
     working_dir: /workspace
+  event_driven_platform:
+    build: .
+    depends_on:
+      cache:
+        condition: service_healthy
+    environment:
+      PORT: 9696
+      REDIS_URL: redis://cache:6379/0
+      XDG_CACHE_HOME: /workspace/.tmp/cache
+    entrypoint:
+      - bundle
+      - exec
+      - bin/event_driven_platform
+    ports:
+      - '9696:9696'
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+  event_driven_worker:
+    build: .
+    depends_on:
+      cache:
+        condition: service_healthy
+    environment:
+      EVENT_WORKER_INTERVAL: 0.1
+      REDIS_URL: redis://cache:6379/0
+      XDG_CACHE_HOME: /workspace/.tmp/cache
+    entrypoint:
+      - bundle
+      - exec
+      - bin/event_driven_worker
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
   microservices_auth:
     build: .
     environment:
