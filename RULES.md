@@ -19,6 +19,7 @@
 - Run everything through Docker
 - Keep Dockerfiles, Compose, and Makefile commands production-ready and aligned with code
 - The system must remain buildable, runnable, and reachable through real requests after changes
+- Reuse existing Docker containers where they can satisfy the requested build, test, smoke, or manual verification step
 
 ## Verification
 

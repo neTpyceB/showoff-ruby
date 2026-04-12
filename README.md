@@ -1,6 +1,6 @@
 # Ruby Show-off Projects
 
-Minimal Docker-first Ruby projects for file automation, metaprogramming, web framework internals, API development, realtime collaboration, and Ruby performance work.
+Minimal Docker-first Ruby projects for file automation, metaprogramming, web framework internals, API development, realtime collaboration, Ruby performance work, and microservice coordination.
 
 ## Features
 
@@ -10,6 +10,7 @@ Minimal Docker-first Ruby projects for file automation, metaprogramming, web fra
 - REST API Service with CRUD, validations, JWT auth, and pagination
 - Realtime Collaboration System with ActionCable shared state updates and notifications
 - High-performance Service with Redis caching, profiling, allocation-aware calculation, and Puma thread tuning
+- Microservices Platform with auth, user, worker, API gateway, and service-to-service HTTP calls
 
 ## Requirements
 
@@ -25,6 +26,7 @@ docker compose up web_framework
 docker compose up rest_api
 docker compose up realtime_collaboration
 docker compose up high_performance
+docker compose up microservices_gateway
 ```
 
 ## CLI Automation Toolkit
@@ -137,6 +139,34 @@ Work endpoint:
 
 ```bash
 curl http://127.0.0.1:9494/work?input=35
+```
+
+## Microservices Platform
+
+Run:
+
+```bash
+docker compose up microservices_gateway
+```
+
+Open:
+
+```bash
+http://127.0.0.1:9595/
+```
+
+Gateway endpoint:
+
+```bash
+curl http://127.0.0.1:9595/api/users/1
+```
+
+Services:
+
+```text
+microservices_gateway -> microservices_auth
+microservices_gateway -> microservices_user
+microservices_gateway -> microservices_worker
 ```
 
 ## Quality Gates
